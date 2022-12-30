@@ -102,9 +102,9 @@ def parse_games(games_to_parse, site):
         with open("f.txt",'r+') as file:
             file.truncate(0)
         games_data.append(game_list)
-    winDF = pd.DataFrame(columns=[ 'id', 'Side', 'Duration', 'GoldDiff', 'First Blood', 'Kills','First Tower', 'Tower Takedowns', 'First Dragon', 'Dragon Takedowns', 'First Baron', 'Baron Takedowns'])
-    blueWinsDF = pd.DataFrame(columns=[ 'id', 'GoldDiff', 'First Blood', 'Kills','First Tower', 'Tower Takedowns', 'First Dragon', 'Dragon Takedowns', 'First Baron', 'Baron Takedowns'])
-    redWinsDF = pd.DataFrame(columns=['id', 'GoldDiff', 'First Blood', 'Kills','First Tower', 'Tower Takedowns', 'First Dragon', 'Dragon Takedowns', 'First Baron', 'Baron Takedowns'])
+    winDF = pd.DataFrame(columns=[ 'id', 'Side', 'Duration', 'Gold Diff', 'First Blood', 'Kills','First Tower', 'Tower Takedowns', 'First Dragon', 'Dragon Takedowns', 'First Baron', 'Baron Takedowns'])
+    blueWinsDF = pd.DataFrame(columns=[ 'id', 'Gold Diff', 'First Blood', 'Kills','First Tower', 'Tower Takedowns', 'First Dragon', 'Dragon Takedowns', 'First Baron', 'Baron Takedowns'])
+    redWinsDF = pd.DataFrame(columns=['id', 'Gold Diff', 'First Blood', 'Kills','First Tower', 'Tower Takedowns', 'First Dragon', 'Dragon Takedowns', 'First Baron', 'Baron Takedowns'])
     for game in games_data:
         if game['blue']['won'] == True : 
             new_row = pd.DataFrame([
@@ -112,7 +112,7 @@ def parse_games(games_to_parse, site):
                     'id':  game['id'],
                     'Side' : 'BLUE',
                     'Duration':  str(datetime.timedelta(seconds = game['duration'])),
-                    'GoldDiff': (game['blue']['total_gold'] - game['red']['total_gold']),
+                    'Gold Diff': (game['blue']['total_gold'] - game['red']['total_gold']),
                     'First Blood': True,
                     'Kills': game['blue']['kills'],
                     'First Tower': game['blue']['first_tower'],
@@ -131,7 +131,7 @@ def parse_games(games_to_parse, site):
                     'id':  game['id'],
                     'Side' : 'RED',
                     'Duration':  str(datetime.timedelta(seconds = game['duration'])),
-                    'GoldDiff':(game['red']['total_gold'] - game['blue']['total_gold']),
+                    'Gold Diff':(game['red']['total_gold'] - game['blue']['total_gold']),
                     'First Blood': True,
                     'Kills': game['red']['kills'],
                     'First Tower': game['red']['first_tower'],
