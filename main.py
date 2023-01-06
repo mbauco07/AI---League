@@ -65,9 +65,9 @@ def get_league_champ_data(games_to_parse):
 	sns.histplot(ax=axes[3,4], data=champsDF[champsDF['Position'] =='Support'], x='Gold Per Minute').set_title("Support-GPM Distribution")
 	axes[0,4].set_axis_off()
 	fig.tight_layout()	
-	plt.show()
+
  
-	plt.savefig("/AI---League/Worlds 2022 Main Event-Champion Data.png")
+	plt.savefig("AI---League/Worlds 2022 Main Event-Champion Data.png")
 	plt.show()
 
 
