@@ -146,3 +146,82 @@ def parse_games(games_to_parse, site):
             winDF = pd.concat([winDF, new_row])
     #return blueWinsDF, redWinsDF
     return winDF
+
+#Helper function that returns the String value of the position the a champion Played in a given game.
+def return_position(i):
+    if i == 0 or i == 5:
+        return "Top"
+    elif i == 1 or i == 6:
+        return "Jungle"
+    elif i == 2 or i == 7:
+        return "Middle"
+    elif i == 3 or i == 8:
+        return "Bottom"
+    elif i == 4 or i == 9:
+        return "Support"
+    return "ERROR"
+
+def parse_champs(games_to_parse, site):
+    champDF = pd.DataFrame(columns=[ 'id', 'Side', 'Champion Name', 'Kills',  'Deaths', 'Assists', 'Position', 'Gold Per Minute', 'Damage Per Minute', 'Team Damage Percentage', 'Won'])   
+    for i in tqdm(range(len(games_to_parse))):
+    #for i in tqdm(range(0,10)):
+        game_response = site.api(
+            action = "query",
+            format = "json",
+            prop = "revisions",
+            titles = "V5_data:"+games_to_parse[i],
+            rvprop = "content",
+            rvslots = "main"
+            )
+        page_id = 0
+        for j in game_response['query']['pages']:
+            page_id = j
+        #this holds the actual game information which itself is a list.
+        game_data = game_response['query']['pages'][page_id]['revisions'][0]['slots']['main']['*']
+        with open("f.txt", "w") as text_file:
+            text_file.write(game_data)
+
+        f = open("f.txt")
+        dict = json.load(f)
+        #this is a list of every champ and theior corresponding data for a given game (each entry is a new champ even if its already in the list)
+        #We can also say because the data for each game is ordered the same way the order in which the champs are ordered also gives us the position the champions played.
+        #i.e 0 & 5 were Top, 1 & 6 were Jungle, 2 & 7 were Middle, 3 & 8 were Bottom, 4 & 9 were Support
+        for i in range (0,10):
+            if i <=4:
+                #print("BLUE SIDE")
+                new_row = pd.DataFrame([
+                        {
+                        'id':  games_to_parse[i],
+                        'Side' : 'Blue',
+                        'Champion Name': dict['participants'][i]['championName'],
+                        'Kills': dict['participants'][i]['kills'],
+                        'Deaths': dict['participants'][i]['deaths'],
+                        'Assists': dict['participants'][i]['assists'], 
+                        'Position': return_position(i),
+                        'Gold Per Minute': round(dict['participants'][i]['challenges']['goldPerMinute'],2), 
+                        'Damage Per Minute':  round(dict['participants'][i]['challenges']['damagePerMinute'],2),
+                        'Team Damage Percentage': round(dict['participants'][i]['challenges']['teamDamagePercentage']*100,2),
+                        'Won': dict['participants'][i]['win']       
+                        }
+                    ]       
+                )
+            elif i > 4:
+                #print("RED SIDE")
+                new_row = pd.DataFrame([
+                        {
+                        'id':  games_to_parse[i],
+                        'Side' : 'Red',
+                        'Champion Name': dict['participants'][i]['championName'],
+                        'Kills': dict['participants'][i]['kills'],
+                        'Deaths': dict['participants'][i]['deaths'],
+                        'Assists': dict['participants'][i]['assists'], 
+                        'Position': return_position(i),
+                        'Gold Per Minute': round(dict['participants'][i]['challenges']['goldPerMinute'],2), 
+                        'Damage Per Minute':  round(dict['participants'][i]['challenges']['damagePerMinute'],2),
+                        'Team Damage Percentage': round(dict['participants'][i]['challenges']['teamDamagePercentage']*100,2),
+                        'Won': dict['participants'][i]['win']       
+                        }
+                    ]       
+                )
+            champDF = pd.concat([champDF, new_row])
+    return champDF
