@@ -9,7 +9,7 @@ site = mwclient.Site('lol.fandom.com', path='/')
 
 
 #parse the games with general game data in mind and then create some plots with data from them
-def get_league_data():
+def get_league_data(games_to_parse):
     #blueDF, redDF = parse_code.parse_games(games_to_parse, site)
 	winDF = parse_code.parse_games(games_to_parse, site)
 	#now with the data parsed let's learn some basic stats about the winning team.
@@ -28,7 +28,7 @@ def get_league_data():
 	fig.suptitle('Team Side win Data for: '+match_overview_page , fontsize=16)
 	fig.tight_layout()
 
-	plt.savefig("Worlds 2022 Main Event.png")
+	plt.savefig("AI---League/LCS 2022 Summer Championship.png")
 	plt.show()
 
 #parse the games with the goal of generating data from the champions played
@@ -73,7 +73,7 @@ def get_league_champ_data(games_to_parse):
 
 
 
-match_overview_page = "2022 Season World Championship/Main Event"
+match_overview_page = "LCS/2022 Season/Championship"
 if "LPL" in match_overview_page:
     raise Exception("Sorry, LPL does not have RiotGamesID due we can't parse it")
 
@@ -97,4 +97,5 @@ for i in response['cargoquery']:
 
 
 print("parsing in progress...")
-get_league_champ_data(games_to_parse)
+#get_league_champ_data(games_to_parse)
+get_league_data(games_to_parse)
