@@ -67,7 +67,7 @@ def get_league_champ_data(games_to_parse):
 	fig.tight_layout()	
 	plt.show()
  
-	plt.savefig("Worlds 2022 Main Event-Champion Data.png")
+	plt.savefig("/AI---League/Worlds 2022 Main Event-Champion Data.png")
 	plt.show()
 
 
