@@ -70,10 +70,65 @@ def get_league_champ_data(games_to_parse):
 	plt.savefig("AI---League/Worlds 2022 Main Event-Champion Data.png")
 	plt.show()
 
+def get_detailed_champ_data(games_to_parse):
+	champsDF = pd.DataFrame()
+	champsDF = parse_code.parse_champs(games_to_parse, site)
+	most_played_top = champsDF['Champion Name'][champsDF['Position'] =='Top'].value_counts().head(5).index.to_list()
+	most_played_jg = champsDF['Champion Name'][champsDF['Position'] =='Jungle'].value_counts().head(5).index.to_list()
+	most_played_mid = champsDF['Champion Name'][champsDF['Position'] =='Middle'].value_counts().head(5).index.to_list()
+	most_played_bot = champsDF['Champion Name'][champsDF['Position'] =='Bottom'].value_counts().head(5).index.to_list()
+	most_played_sup = champsDF['Champion Name'][champsDF['Position'] =='Support'].value_counts().head(5).index.to_list()
+
+	#print(champsDF[champsDF['Champion Name'].isin(most_played_top)])
+	#print(champsDF[champsDF['Champion Name'].isin(most_played_top)].groupby('Champion Name')['Gold Per Minute'].mean().round(2).reset_index())
+	fig, axes = plt.subplots(3, 5, figsize=(18, 10))
+	sns.countplot(ax=axes[0,0], data=champsDF[champsDF['Champion Name'].isin(most_played_top)], y='Champion Name', hue='Side').set_title("Top-5-Top-Side-Dist ")
+	sns.countplot(ax=axes[0,1], data=champsDF[champsDF['Champion Name'].isin(most_played_jg)], y='Champion Name', hue='Side').set_title("Top-5-Jg-Side-Dist ")
+	sns.countplot(ax=axes[0,2], data=champsDF[champsDF['Champion Name'].isin(most_played_mid)], y='Champion Name', hue='Side').set_title("Top-5-Mid-Side-Dist ")
+	sns.countplot(ax=axes[0,3], data=champsDF[champsDF['Champion Name'].isin(most_played_bot)], y='Champion Name', hue='Side').set_title("Top-5-Bot-Side-Dist ")
+	sns.countplot(ax=axes[0,4], data=champsDF[champsDF['Champion Name'].isin(most_played_sup)], y='Champion Name', hue='Side').set_title("Top-5-Sup-Side-Dist ")
+ 
+	sns.barplot(ax=axes[1,0], data=champsDF[champsDF['Champion Name'].isin(most_played_top)].groupby('Champion Name')['Gold Per Minute'].mean().round(2).reset_index(),
+        y='Champion Name',   x='Gold Per Minute' ).set_title("Top-5-Top-GPM")
+	sns.barplot(ax=axes[1,1], data=champsDF[champsDF['Champion Name'].isin(most_played_jg)].groupby('Champion Name')['Gold Per Minute'].mean().round(2).reset_index(),
+        y='Champion Name',   x='Gold Per Minute' ).set_title("Top-5-Jg-GPM")
+	sns.barplot(ax=axes[1,2], data=champsDF[champsDF['Champion Name'].isin(most_played_mid)].groupby('Champion Name')['Gold Per Minute'].mean().round(2).reset_index(),
+        y='Champion Name',   x='Gold Per Minute' ).set_title("Top-5-Mid-GPM")
+	sns.barplot(ax=axes[1,3], data=champsDF[champsDF['Champion Name'].isin(most_played_bot)].groupby('Champion Name')['Gold Per Minute'].mean().round(2).reset_index(),
+        y='Champion Name',   x='Gold Per Minute' ).set_title("Top-5-Bot-GPM")
+	sns.barplot(ax=axes[1,4], data=champsDF[champsDF['Champion Name'].isin(most_played_sup)].groupby('Champion Name')['Gold Per Minute'].mean().round(2).reset_index(),
+        y='Champion Name',   x='Gold Per Minute' ).set_title("Top-5-Sup-GPM")
+ 
+	sns.barplot(ax=axes[2,0], data=champsDF[champsDF['Champion Name'].isin(most_played_top)].groupby('Champion Name')['Damage Per Minute'].mean().round(2).reset_index(),
+        y='Champion Name',   x='Damage Per Minute' ).set_title("Top-5-Top-DPM")
+	sns.barplot(ax=axes[2,1], data=champsDF[champsDF['Champion Name'].isin(most_played_jg)].groupby('Champion Name')['Damage Per Minute'].mean().round(2).reset_index(),
+        y='Champion Name',   x='Damage Per Minute' ).set_title("Top-5-Jg-DPM")
+	sns.barplot(ax=axes[2,2], data=champsDF[champsDF['Champion Name'].isin(most_played_mid)].groupby('Champion Name')['Damage Per Minute'].mean().round(2).reset_index(),
+        y='Champion Name',   x='Damage Per Minute' ).set_title("Top-5-Mid-DPM")
+	sns.barplot(ax=axes[2,3], data=champsDF[champsDF['Champion Name'].isin(most_played_bot)].groupby('Champion Name')['Damage Per Minute'].mean().round(2).reset_index(),
+        y='Champion Name',   x='Damage Per Minute' ).set_title("Top-5-Bot-DPM")
+	sns.barplot(ax=axes[2,4], data=champsDF[champsDF['Champion Name'].isin(most_played_sup)].groupby('Champion Name')['Damage Per Minute'].mean().round(2).reset_index(),
+        y='Champion Name',   x='Damage Per Minute' ).set_title("Top-5-Sup-DPM")
+
+	sns.barplot(ax=axes[2,0], data=champsDF[champsDF['Champion Name'].isin(most_played_top)].groupby('Champion Name')['Team Damage Percentage'].mean().round(2).reset_index(),
+        y='Champion Name',   x='Team Damage Percentage' ).set_title("Top-5-Top-TDP")
+	sns.barplot(ax=axes[2,1], data=champsDF[champsDF['Champion Name'].isin(most_played_jg)].groupby('Champion Name')['Team Damage Percentage'].mean().round(2).reset_index(),
+        y='Champion Name',   x='Team Damage Percentage' ).set_title("Top-5-Jg-TDP")
+	sns.barplot(ax=axes[2,2], data=champsDF[champsDF['Champion Name'].isin(most_played_mid)].groupby('Champion Name')['Team Damage Percentage'].mean().round(2).reset_index(),
+        y='Champion Name',   x='Team Damage Percentage' ).set_title("Top-5-Mid-TDP")
+	sns.barplot(ax=axes[2,3], data=champsDF[champsDF['Champion Name'].isin(most_played_bot)].groupby('Champion Name')['Team Damage Percentage'].mean().round(2).reset_index(),
+        y='Champion Name',   x='Team Damage Percentage' ).set_title("Top-5-Bot-TDP")
+	sns.barplot(ax=axes[2,4], data=champsDF[champsDF['Champion Name'].isin(most_played_sup)].groupby('Champion Name')['Team Damage Percentage'].mean().round(2).reset_index(),
+        y='Champion Name',   x='Team Damage Percentage' ).set_title("Top-5-Sup-TDP")
+
+	fig.tight_layout()	
+	plt.show()
+ 
 
 
+list_of_series = ["2022 Season World Championship/Main Event", "LCS/2022 Season/Championship"]
+match_overview_page = list_of_series[0]
 
-match_overview_page = "LCS/2022 Season/Championship"
 if "LPL" in match_overview_page:
     raise Exception("Sorry, LPL does not have RiotGamesID due we can't parse it")
 
@@ -98,4 +153,5 @@ for i in response['cargoquery']:
 
 print("parsing in progress...")
 #get_league_champ_data(games_to_parse)
-get_league_data(games_to_parse)
+#get_league_data(games_to_parse)
+get_detailed_champ_data(games_to_parse)

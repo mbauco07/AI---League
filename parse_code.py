@@ -164,7 +164,7 @@ def return_position(i):
 def parse_champs(games_to_parse, site):
     champDF = pd.DataFrame(columns=[ 'id', 'Side', 'Champion Name', 'Kills',  'Deaths', 'Assists', 'Position', 'Gold Per Minute', 'Damage Per Minute', 'Team Damage Percentage', 'Won'])   
     for i in tqdm(range(len(games_to_parse))):
-    #for i in tqdm(range(0,10)):
+    #for i in tqdm(range(0,20)):
         game_response = site.api(
             action = "query",
             format = "json",
@@ -225,3 +225,7 @@ def parse_champs(games_to_parse, site):
                 )
             champDF = pd.concat([champDF, new_row])
     return champDF
+
+def generate_details_champs(df):
+    
+    return None
